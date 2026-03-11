@@ -1,0 +1,8 @@
+{
+  "name": "dogear-web",
+  "version": "1.0.0",
+  "description": "DögEar public share pages",
+  "scripts": {
+    "build": "echo 'Static site - no build needed'"
+  }
+}
