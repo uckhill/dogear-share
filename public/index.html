@@ -1,21 +1,23 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title id="page-title">DögEar</title>
-  
+
   <!-- Social sharing meta tags -->
+
   <meta property="og:title" content="Check out my DögEar 🐶" id="og-title">
   <meta property="og:description" content="Videos I saved today" id="og-description">
   <meta property="og:image" content="https://dogearhq.com/dogear-share-preview.png" id="og-image">
   <meta property="og:type" content="website">
-  
+
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Check out my DögEar 🐶" id="twitter-title">
   <meta name="twitter:description" content="Videos I saved today" id="twitter-description">
   <meta name="twitter:image" content="https://dogearhq.com/dogear-share-preview.png" id="twitter-image">
-  
+
   <style>
     * {
       margin: 0;
@@ -227,46 +229,50 @@
       font-size: 48px;
     }
   </style>
+
 </head>
 <body>
   <div class="container">
     <div id="loading" class="loading">
       <p>Loading DögEar...</p>
     </div>
-    
-    <div id="error" class="error" style="display: none;"></div>
-    
-    <div id="content" style="display: none;">
-      <div class="header">
-        <h1 id="user-name">DögEar</h1>
-        <p id="date-text">Videos from today</p>
-      </div>
-      
-      <div class="stats">
-        <span id="video-count">0 videos</span>
-        <span>•</span>
-        <span id="view-count">0 views</span>
-      </div>
-      
-      <div class="carousel-container">
-        <div class="carousel" id="carousel">
-          <!-- Videos will be inserted here -->
-        </div>
-        
-        <div class="nav-buttons">
-          <button class="nav-btn" id="prev-btn" onclick="previousSlide()">← Previous</button>
-          <button class="nav-btn" id="next-btn" onclick="nextSlide()">Next →</button>
-        </div>
-        
-        <div class="indicator-dots" id="dots">
-          <!-- Dots will be inserted here -->
-        </div>
-      </div>
-      
-      <a href="#" class="cta-button" id="cta-button" target="_blank">
-        Get DögEar 🐶
-      </a>
+
+```
+<div id="error" class="error" style="display: none;"></div>
+
+<div id="content" style="display: none;">
+  <div class="header">
+    <h1 id="user-name">DögEar</h1>
+    <p id="date-text">Videos from today</p>
+  </div>
+  
+  <div class="stats">
+    <span id="video-count">0 videos</span>
+    <span>•</span>
+    <span id="view-count">0 views</span>
+  </div>
+  
+  <div class="carousel-container">
+    <div class="carousel" id="carousel">
+      <!-- Videos will be inserted here -->
     </div>
+    
+    <div class="nav-buttons">
+      <button class="nav-btn" id="prev-btn" onclick="previousSlide()">← Previous</button>
+      <button class="nav-btn" id="next-btn" onclick="nextSlide()">Next →</button>
+    </div>
+    
+    <div class="indicator-dots" id="dots">
+      <!-- Dots will be inserted here -->
+    </div>
+  </div>
+  
+  <a href="#" class="cta-button" id="cta-button" target="_blank">
+    Get DögEar 🐶
+  </a>
+</div>
+```
+
   </div>
 
   <script>
@@ -277,21 +283,35 @@
     // API URL - use production Railway backend
     const API_URL = 'https://api.dogearhq.com';
     
+    console.log('🔍 Script loaded');
+    console.log('🔍 Current URL:', window.location.href);
+    console.log('🔍 Pathname:', window.location.pathname);
+    
     // Get share code from URL (/d/abc123)
     const pathParts = window.location.pathname.split('/');
     shareCode = pathParts[pathParts.length - 1];
     
+    console.log('🔍 Share code:', shareCode);
+    console.log('🔍 API URL:', `${API_URL}/api/dogears/view/${shareCode}`);
+    
     // Fetch DögEar data
     async function loadDogear() {
       try {
+        console.log('📡 Fetching data...');
         const response = await fetch(`${API_URL}/api/dogears/view/${shareCode}`);
+        
+        console.log('📡 Response status:', response.status);
         
         if (!response.ok) {
           throw new Error('DögEar not found or expired');
         }
         
         const data = await response.json();
+        console.log('✅ Data received:', data);
+        
         videos = data.videos;
+        
+        console.log('📹 Videos:', videos.length);
         
         // Update page title and meta tags
         const title = `${data.userName}'s DögEar from ${formatDate(data.date)}`;
@@ -322,7 +342,7 @@
         document.getElementById('cta-button').onclick = () => trackClick();
         
       } catch (error) {
-        console.error('Error loading DögEar:', error);
+        console.error('❌ Error loading DögEar:', error);
         document.getElementById('loading').style.display = 'none';
         document.getElementById('error').style.display = 'block';
         document.getElementById('error').textContent = error.message || 'Failed to load DögEar';
@@ -464,5 +484,6 @@
     // Load on page load
     loadDogear();
   </script>
+
 </body>
 </html>
