@@ -38,9 +38,10 @@
     }
     
     .logo {
-      width: 64px;
-      height: 64px;
-      margin: 0 auto 20px;
+      width: 48px;
+      height: 48px;
+      margin: 0 auto 16px;
+      display: block;
     }
     
     .user-info {
@@ -106,20 +107,22 @@
     
     .video-thumbnail {
       width: 100%;
-      aspect-ratio: 9 / 16;
+      height: 200px;
       object-fit: cover;
       background: #f0f0f0;
       display: block;
+      border-radius: 12px 12px 0 0;
     }
     
     .placeholder-thumbnail {
       width: 100%;
-      aspect-ratio: 9 / 16;
+      height: 200px;
       background: linear-gradient(135deg, #9AD5B3 0%, #7EC4A6 100%);
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 72px;
+      font-size: 48px;
+      border-radius: 12px 12px 0 0;
     }
     
     .video-info {
@@ -273,16 +276,13 @@
   <div id="content" style="display: none;">
     <!-- Header -->
     <div class="header">
-      <svg class="logo" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <circle cx="50" cy="50" r="45" fill="white"/>
-        <path d="M35 40 Q35 30 45 30 L55 30 Q65 30 65 40 L65 65 Q65 75 55 75 L45 75 Q35 75 35 65 Z" fill="#0F172A"/>
-        <circle cx="42" cy="45" r="4" fill="white"/>
-        <circle cx="58" cy="45" r="4" fill="white"/>
-        <path d="M40 60 Q50 65 60 60" stroke="#0F172A" stroke-width="3" stroke-linecap="round" fill="none"/>
-      </svg>
+      <img src="https://dogearhq.com/logo.png" class="logo" alt="DögEar Logo" onerror="this.style.display='none'">
       
       <div class="user-info">
-        <div class="profile-pic" id="profile-pic">🐕</div>
+        <div class="profile-pic" id="profile-pic">
+          <img id="profile-img" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover; display: none;" alt="Profile">
+          <span id="profile-emoji" style="display: none;">🐕</span>
+        </div>
         <span class="username" id="username">@dogearhq</span>
       </div>
       
@@ -336,6 +336,15 @@
         // Update header
         document.getElementById('username').textContent = `@${data.userName}`;
         document.getElementById('video-count').textContent = `${data.videoCount}/10`;
+        
+        // Set profile photo or emoji
+        if (data.profilePhoto) {
+          const profileImg = document.getElementById('profile-img');
+          profileImg.src = data.profilePhoto;
+          profileImg.style.display = 'block';
+        } else {
+          document.getElementById('profile-emoji').style.display = 'block';
+        }
         
         // Update page title
         const title = `${data.userName}'s DögEar from ${formatDate(data.date)}`;
