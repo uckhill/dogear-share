@@ -45,15 +45,17 @@
       color: white;
     }
     
-    .header h1 {
-      font-size: 32px;
+    .header-logo {
+      font-size: 48px;
       margin-bottom: 8px;
       font-weight: 700;
+      letter-spacing: -1px;
     }
     
-    .header p {
-      font-size: 18px;
+    .header-tagline {
+      font-size: 16px;
       opacity: 0.9;
+      font-weight: 500;
     }
     
     .stats {
@@ -253,8 +255,8 @@
     
     <div id="content" style="display: none;">
       <div class="header">
-        <h1 id="user-name">DögEar</h1>
-        <p id="date-text">Videos from today</p>
+        <div class="header-logo">DögEar 🐶</div>
+        <div class="header-tagline">Scroll Less. Live More.</div>
       </div>
       
       <div class="stats">
@@ -322,19 +324,17 @@
         
         console.log('📹 Videos:', videos.length);
         
-        // Update page title and meta tags
-        const title = `${data.userName}'s DögEar from ${formatDate(data.date)}`;
+        // Update page title and meta tags (anonymous)
+        const title = `DögEar - ${formatDate(data.date)}`;
         document.getElementById('page-title').textContent = title;
-        document.getElementById('og-title').setAttribute('content', title);
-        document.getElementById('twitter-title').setAttribute('content', title);
+        document.getElementById('og-title').setAttribute('content', 'Check out this DögEar 🐶');
+        document.getElementById('twitter-title').setAttribute('content', 'Check out this DögEar 🐶');
         
         const description = `${data.videoCount} videos saved on ${formatDate(data.date)}`;
         document.getElementById('og-description').setAttribute('content', description);
         document.getElementById('twitter-description').setAttribute('content', description);
         
-        // Update UI
-        document.getElementById('user-name').textContent = `${data.userName}'s DögEar 🐶`;
-        document.getElementById('date-text').textContent = formatDate(data.date);
+        // Update stats only (no username displayed)
         document.getElementById('video-count').textContent = `${data.videoCount} video${data.videoCount > 1 ? 's' : ''}`;
         document.getElementById('view-count').textContent = `${data.viewCount} view${data.viewCount !== 1 ? 's' : ''}`;
         
