@@ -4,18 +4,18 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title id="page-title">DögEar</title>
-
+  
   <!-- Social sharing meta tags -->
   <meta property="og:title" content="Check out my DögEar 🐶" id="og-title">
   <meta property="og:description" content="Videos I saved today" id="og-description">
   <meta property="og:image" content="https://dogearhq.com/dogear-share-preview.png" id="og-image">
   <meta property="og:type" content="website">
-
+  
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Check out my DögEar 🐶" id="twitter-title">
   <meta name="twitter:description" content="Videos I saved today" id="twitter-description">
   <meta name="twitter:image" content="https://dogearhq.com/dogear-share-preview.png" id="twitter-image">
-
+  
   <style>
     * {
       margin: 0;
@@ -81,6 +81,8 @@
       border-radius: 16px;
       background: black;
       aspect-ratio: 9 / 16;
+      touch-action: pan-y; /* Allow vertical scroll but capture horizontal swipes */
+      user-select: none; /* Prevent text selection during swipe */
     }
     
     .video-slide {
@@ -88,6 +90,7 @@
       width: 100%;
       height: 100%;
       position: relative;
+      transition: opacity 0.3s ease-in-out;
     }
     
     .video-slide.active {
@@ -95,6 +98,18 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
+      animation: fadeIn 0.3s ease-in-out;
+    }
+    
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateX(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
     }
     
     .video-info {
@@ -233,9 +248,9 @@
     <div id="loading" class="loading">
       <p>Loading DögEar...</p>
     </div>
-
+    
     <div id="error" class="error" style="display: none;"></div>
-
+    
     <div id="content" style="display: none;">
       <div class="header">
         <h1 id="user-name">DögEar</h1>
@@ -331,7 +346,7 @@
         document.getElementById('content').style.display = 'block';
         
         // Set App Store link
-        const appStoreUrl = 'https://apps.apple.com/us/app/d%C3%B6gear-daily-videos-w-friends/id6756027826';
+        const appStoreUrl = 'https://apps.apple.com/app/dogear/id123456789'; // TODO: Replace with real URL
         document.getElementById('cta-button').href = appStoreUrl;
         document.getElementById('cta-button').onclick = () => trackClick();
         
@@ -419,6 +434,11 @@
       dots[currentSlide].classList.add('active');
       
       updateNavButtons();
+      
+      // Haptic feedback on iOS
+      if (navigator.vibrate) {
+        navigator.vibrate(10);
+      }
     }
     
     function nextSlide() {
@@ -474,6 +494,36 @@
       if (e.key === 'ArrowLeft') previousSlide();
       if (e.key === 'ArrowRight') nextSlide();
     });
+    
+    // Touch/Swipe support for mobile
+    let touchStartX = 0;
+    let touchEndX = 0;
+    
+    const carousel = document.getElementById('carousel');
+    
+    carousel.addEventListener('touchstart', (e) => {
+      touchStartX = e.changedTouches[0].screenX;
+    }, { passive: true });
+    
+    carousel.addEventListener('touchend', (e) => {
+      touchEndX = e.changedTouches[0].screenX;
+      handleSwipe();
+    }, { passive: true });
+    
+    function handleSwipe() {
+      const swipeThreshold = 50; // Minimum distance for a swipe
+      const diff = touchStartX - touchEndX;
+      
+      if (Math.abs(diff) > swipeThreshold) {
+        if (diff > 0) {
+          // Swiped left - go to next slide
+          nextSlide();
+        } else {
+          // Swiped right - go to previous slide
+          previousSlide();
+        }
+      }
+    }
     
     // Load on page load
     loadDogear();
